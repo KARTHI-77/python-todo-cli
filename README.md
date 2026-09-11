@@ -35,7 +35,6 @@ python-todo-cli/
 ├── data/
 │   └── tasks.json
 │── src/
-│   ├── __init__.py
 │   ├── main.py
 │   ├── storage.py
 │   └── todo.py

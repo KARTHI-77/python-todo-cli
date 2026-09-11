@@ -3,7 +3,6 @@ from storage import load_tasks, save_tasks
 
 
 def display_menu():
-    """Display the application's main menu."""
 
     print("\n" + "=" * 35)
     print("          PYTODO CLI")
@@ -17,7 +16,6 @@ def display_menu():
 
 
 def display_tasks(manager):
-    """Display all tasks in a readable format."""
 
     tasks = manager.get_tasks()
 
@@ -37,7 +35,6 @@ def display_tasks(manager):
 
 
 def get_task_id():
-    """Ask the user for a valid positive task ID."""
 
     while True:
         value = input("Enter task ID: ").strip()
@@ -56,7 +53,6 @@ def get_task_id():
 
 
 def add_task(manager):
-    """Handle adding a new task."""
 
     title = input("Enter task title: ").strip()
 
@@ -74,7 +70,6 @@ def add_task(manager):
 
 
 def complete_task(manager):
-    """Handle marking a task as completed."""
 
     if not manager.get_tasks():
         print("\n📋 No tasks available.")
@@ -97,7 +92,6 @@ def complete_task(manager):
 
 
 def remove_task(manager):
-    """Handle removing a task."""
 
     if not manager.get_tasks():
         print("\n📋 No tasks available.")
@@ -120,7 +114,6 @@ def remove_task(manager):
 
 
 def main():
-    """Run the To-Do List CLI application."""
 
     manager = TodoManager(load_tasks())
 

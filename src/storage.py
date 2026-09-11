@@ -6,7 +6,6 @@ DATA_FILE = Path(__file__).resolve().parent.parent / "data" / "tasks.json"
 
 
 def load_tasks(file_path=DATA_FILE):
-    """Load tasks from a JSON file."""
 
     file_path = Path(file_path)
 
@@ -42,7 +41,6 @@ def load_tasks(file_path=DATA_FILE):
 
 
 def save_tasks(tasks, file_path=DATA_FILE):
-    """Save tasks to a JSON file."""
 
     file_path = Path(file_path)
 

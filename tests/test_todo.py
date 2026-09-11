@@ -1,6 +1,10 @@
+import json
+import tempfile
 import unittest
+from pathlib import Path
 
 from src.todo import TodoManager
+from src.storage import load_tasks, save_tasks
 
 
 class TestTodoManager(unittest.TestCase):
@@ -103,6 +107,72 @@ class TestTodoManager(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.manager.remove_task(999)
 
+class TestStorage(unittest.TestCase):
+    """Test cases for task data storage."""
+
+    def test_save_and_load_tasks(self):
+        """Tasks should be saved and loaded correctly."""
+
+        tasks = [
+            {
+                "id": 1,
+                "title": "Learn Python",
+                "completed": False
+            },
+            {
+                "id": 2,
+                "title": "Build a project",
+                "completed": True
+            }
+        ]
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            file_path = Path(temp_dir) / "tasks.json"
+
+            save_tasks(tasks, file_path)
+            loaded_tasks = load_tasks(file_path)
+
+            self.assertEqual(loaded_tasks, tasks)
+
+    def test_load_missing_file(self):
+        """Loading a nonexistent file should return an empty list."""
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            file_path = Path(temp_dir) / "missing.json"
+
+            tasks = load_tasks(file_path)
+
+            self.assertEqual(tasks, [])
+
+    def test_load_invalid_json(self):
+        """Invalid JSON should return an empty list."""
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            file_path = Path(temp_dir) / "invalid.json"
+
+            file_path.write_text(
+                "this is not valid JSON",
+                encoding="utf-8"
+            )
+
+            tasks = load_tasks(file_path)
+
+            self.assertEqual(tasks, [])
+
+    def test_load_invalid_data_format(self):
+        """JSON containing a non-list value should return an empty list."""
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            file_path = Path(temp_dir) / "invalid_format.json"
+
+            file_path.write_text(
+                json.dumps({"task": "Learn Python"}),
+                encoding="utf-8"
+            )
+
+            tasks = load_tasks(file_path)
+
+            self.assertEqual(tasks, [])
 
 if __name__ == "__main__":
     unittest.main()

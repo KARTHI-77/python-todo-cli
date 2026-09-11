@@ -5,14 +5,16 @@ from pathlib import Path
 DATA_FILE = Path(__file__).resolve().parent.parent / "data" / "tasks.json"
 
 
-def load_tasks():
-    """Load tasks from the JSON file."""
+def load_tasks(file_path=DATA_FILE):
+    """Load tasks from a JSON file."""
 
-    if not DATA_FILE.exists():
+    file_path = Path(file_path)
+
+    if not file_path.exists():
         return []
 
     try:
-        with DATA_FILE.open("r", encoding="utf-8") as file:
+        with file_path.open("r", encoding="utf-8") as file:
             data = json.load(file)
 
         if not isinstance(data, list):
@@ -21,7 +23,10 @@ def load_tasks():
         return data
 
     except json.JSONDecodeError:
-        print("⚠️ Warning: tasks.json contains invalid JSON. Starting with an empty task list.")
+        print(
+            "⚠️ Warning: tasks.json contains invalid JSON. "
+            "Starting with an empty task list."
+        )
         return []
 
     except OSError as error:
@@ -29,17 +34,22 @@ def load_tasks():
         return []
 
     except ValueError:
-        print("⚠️ Warning: Invalid task data format. Starting with an empty task list.")
+        print(
+            "⚠️ Warning: Invalid task data format. "
+            "Starting with an empty task list."
+        )
         return []
 
 
-def save_tasks(tasks):
-    """Save tasks to the JSON file."""
+def save_tasks(tasks, file_path=DATA_FILE):
+    """Save tasks to a JSON file."""
+
+    file_path = Path(file_path)
 
     try:
-        DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
+        file_path.parent.mkdir(parents=True, exist_ok=True)
 
-        with DATA_FILE.open("w", encoding="utf-8") as file:
+        with file_path.open("w", encoding="utf-8") as file:
             json.dump(tasks, file, indent=4)
 
     except OSError as error:
